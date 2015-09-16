@@ -1,0 +1,29 @@
+---
+dependencies:
+  - role: debops.php5
+    php5_packages:
+      - php-fpdf
+    php5_pools: [ '{{ lam_php5_pool }}' ]
+
+  - role: debops.nginx
+    nginx_servers: [ '{{ lam_nginx_server }}' ]
+    nginx_upstreams: [ '{{ lam_nginx_upstream_php5 }}' ]
+
+galaxy_info:
+  author: 'Patryk Sciborek'
+  description: 'Install LDAP Account Manager, webfrontend for managing accounts in an LDAP directory'
+  company: 'DebOps'
+  license: 'GPLv3'
+  min_ansible_version: '1.7.1'
+  platforms:
+    - name: Ubuntu
+      versions:
+        - precise
+        - trusty
+    - name: Debian
+      versions:
+        - wheezy
+        - jessie
+  categories:
+    - web
+  

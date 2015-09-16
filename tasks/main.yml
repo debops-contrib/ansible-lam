@@ -1,0 +1,61 @@
+---
+# tasks file for debops.lam
+
+- name: Create LDAP Account Manager group
+  group:
+    name: '{{ lam_group }}'
+    system: True
+    state: 'present'
+
+- name: Create LDAP Account Manager user
+  user:
+    name: '{{ lam_user }}'
+    group: '{{ lam_group }}'
+    home: '{{ lam_home }}'
+    shell: '/bin/false'
+    comment: 'LDAP Account Manager user'
+    createhome: False
+    system: True
+    state: 'present'
+  when: lam_user != 'www-data'
+  register: lam_register_user_create
+
+- debug:
+    msg: '{{ lam_register_user_create }}'
+
+- name: Install LDAP Account Manager package
+  apt:
+    name: 'ldap-account-manager'
+    state: 'present'
+    install_recommends: False
+  register: lam_register_lam_install
+
+- name: Override attributes for saslauthd socket in Postfix chroot
+  shell: "dpkg-statoverride --update --add {{ lam_user }} {{ lam_group }} 700 {{ lam_home }}/{{ item }}"
+  with_items:
+    - config
+    - sess
+    - tmp
+  when: lam_register_user_create.changed
+
+- name: Remove autocreated lam profile
+  command: mv /var/lib/ldap-account-manager/config/lam.conf /var/lib/ldap-account-manager/config/lam.conf.off
+  when: lam_register_lam_install.changed
+
+- name: Generate profiles
+  template:
+    src: 'var/lib/ldap-account-manager/config/profile.conf.j2'
+    dest: '/var/lib/ldap-account-manager/config/{{ item.name|replace(".", "_") }}.conf'
+    owner: '{{ lam_user }}'
+    group: '{{ lam_group }}'
+    mode: '0600'
+  with_items: lam_profiles
+
+- name: Generate config file
+  template:
+    src: 'var/lib/ldap-account-manager/config/config.cfg.j2'
+    dest: '/var/lib/ldap-account-manager/config/config.cfg'
+    owner: '{{ lam_user }}'
+    group: '{{ lam_group }}'
+    mode: '0600'
+

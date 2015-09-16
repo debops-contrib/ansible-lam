@@ -1,0 +1,44 @@
+---
+# vars file for debops.lam
+lam_home: '/var/lib/ldap-account-manager'
+
+# Configuration for php5-fpm pool
+lam_php5_pool:
+  enabled: True
+  name: 'lam'
+  user: '{{ lam_user }}'
+  group: '{{ lam_group }}'
+
+# nginx configuration - PHP5 upstream
+lam_nginx_upstream_php5:
+  enabled: True
+  name: 'php5_lam'
+  type: 'php5'
+  php5: 'lam'
+
+# nginx configuration - LAM server
+lam_nginx_server:
+  by_role: 'debops.lam'
+  enabled: True
+  type: 'php5'
+  filename: '{{ lam_nginx_filename }}'
+  name: [ '{{ lam_vhost_domain }}' ]
+  index: 'index.html'
+  root: '/usr/share/ldap-account-manager'
+
+  options: |
+    autoindex off;
+  location:
+    '/tmp/internal': |
+       deny all;
+    '/sess/': |
+       deny all;
+    '/config/': |
+       deny all;
+    '/lib/': |
+       deny all;
+    '/help/': |
+       deny all;
+    '/locale/': |
+       deny all;
+  php5: 'php5_lam'
