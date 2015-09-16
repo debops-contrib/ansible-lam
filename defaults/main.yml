@@ -14,12 +14,12 @@ lam_basedn: '{{ "dc=" + lam_domain.split(".") | join(",dc=") }}'
 # .. envvar:: lam_user
 #
 # LAM system user account
-lam_user: 'www-data'
+lam_user: 'lam'
 
 # .. envvar:: lam_group
 #
 # LAM system user group
-lam_group: 'www-data'
+lam_group: 'lam'
 
 # .. envvar:: lam_nginx_filename
 #

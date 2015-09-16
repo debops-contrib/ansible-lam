@@ -20,9 +20,6 @@
   when: lam_user != 'www-data'
   register: lam_register_user_create
 
-- debug:
-    msg: '{{ lam_register_user_create }}'
-
 - name: Install LDAP Account Manager package
   apt:
     name: 'ldap-account-manager'
@@ -30,7 +27,7 @@
     install_recommends: False
   register: lam_register_lam_install
 
-- name: Override attributes for saslauthd socket in Postfix chroot
+- name: Override attributes for config, session and temporary directories
   shell: "dpkg-statoverride --update --add {{ lam_user }} {{ lam_group }} 700 {{ lam_home }}/{{ item }}"
   with_items:
     - config
