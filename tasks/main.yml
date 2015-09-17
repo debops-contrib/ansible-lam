@@ -31,8 +31,29 @@
   shell: "dpkg-statoverride --update --add {{ lam_user }} {{ lam_group }} 700 {{ lam_home }}/{{ item }}"
   with_items:
     - config
-    - sess
+    - config/pdf
+    - config/profiles
+    - config/selfService
+    - config/templates
+    - config/templates/pdf
+    - config/templates/pdf/logos
+    - config/templates/profiles
     - tmp
+    - tmp/internal
+    - sess
+  when: lam_register_user_create.changed
+
+- name: Override attributes for config, session and temporary files
+  shell: "dpkg-statoverride --update --add {{ lam_user }} {{ lam_group }} 600 {{ lam_home }}/{{ item }}"
+  with_items:
+    - config/.htaccess
+    - config/config.cfg
+    - config/config.cfg.sample
+    - config/lam.conf.sample
+    - config/language
+    - tmp/.htaccess
+    - tmp/internal/.htaccess
+    - sess/.htaccess
   when: lam_register_user_create.changed
 
 - name: Remove autocreated lam profile
