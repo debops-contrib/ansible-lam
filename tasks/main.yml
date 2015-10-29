@@ -1,5 +1,4 @@
 ---
-# tasks file for debops.lam
 
 - name: Create LDAP Account Manager group
   group:

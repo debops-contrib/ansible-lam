@@ -1,0 +1,22 @@
+---
+
+ansigenome_info:
+  github_url: "https://github.com/debops/ansible-lam"
+  git_branch: "master"
+  galaxy_id: ""
+
+  travis: True
+
+  license_url: 'https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)'
+
+  authors:
+    - name:  'Patryk Ściborek'
+      url: ''
+      email: 'patryk@sciborek.com'
+      twitter: ''
+      github: 'scibi'
+
+  synopsis: |
+    This role installs [LDAP Account Manager](https://www.ldap-account-manager.org/),
+    a webfrontend for managing entries (e.g. users, groups, DHCP settings) stored
+    in an LDAP directory.

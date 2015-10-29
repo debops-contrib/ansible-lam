@@ -1,25 +1,43 @@
 ---
-# defaults file for debops.lam
+# Default variables
+# =================
 
+# .. contents:: Sections
+#    :local:
+#
+# ----------------------------------
+#   Users and databases to create
+# ----------------------------------
+
+
+# .. envvar:: lam_domain
+#
 # DNS domain name which will be used for OpenLDAP BaseDN
 lam_domain: '{{ ansible_domain }}'
 
+
+# .. envvar:: lam_basedn
+#
 # BaseDN value of the OpenLDAP server
 lam_basedn: '{{ "dc=" + lam_domain.split(".") | join(",dc=") }}'
+
 
 # --------------------------------
 #   User, group, app directories
 # --------------------------------
+
 
 # .. envvar:: lam_user
 #
 # LAM system user account
 lam_user: 'lam'
 
+
 # .. envvar:: lam_group
 #
 # LAM system user group
 lam_group: 'lam'
+
 
 # .. envvar:: lam_nginx_filename
 #
@@ -28,13 +46,36 @@ lam_group: 'lam'
 lam_nginx_filename: 'debops.lam'
 
 
+# .. envvar:: lam_vhost_domain
+#
+#
 lam_vhost_domain: '{{ ansible_fqdn }}'
+
+
+# .. envvar:: lam_default_admins
+#
+#
 lam_default_admins: [ 'cn=admin,{{ lam_basedn }}' ]
+
+
+# .. envvar:: lam_default_language
+#
+#
 lam_default_language: 'en_GB.utf8:UTF-8:English (Great Britain)'
 
+
+
+# .. envvar:: lam_profiles
+#
+#
 lam_profiles:
   - name: '{{ lam_domain }}'
 #    server_url: 'ldaps://ldap.{{ ansible_domain }}/'
 #    admins: '{{ lam_default_admins }}'
 
+
+# .. envvar:: lam_default_profile
+#
+#
 lam_default_profile: '{{ lam_profiles[0].name }}'
+
